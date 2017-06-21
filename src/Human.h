@@ -6,5 +6,4 @@ public:
 			Human();
 
 	void	shoot(int& x, int& y);
-	void	callPause() const;
 };

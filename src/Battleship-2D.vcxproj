@@ -147,19 +147,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Bot.h" />
+    <ClInclude Include="ConsoleHelper.h" />
     <ClInclude Include="GameField.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Human.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bot.cpp" />
+    <ClCompile Include="ConsoleHelper.cpp" />
     <ClCompile Include="GameField.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Human.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

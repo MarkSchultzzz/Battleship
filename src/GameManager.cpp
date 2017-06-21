@@ -21,18 +21,26 @@ GameManager::handleTurn(const int& turnResult)
 {
 	switch (turnResult)
 	{
-	case 0:
-		if (turnShoot_)
+	case 0 :
+		if (turnShoot_ == true)
 			turnShoot_ = false;
 		else
 			turnShoot_ = true;
 		break;
-	case 1:
+	case 1 :
 		players_[static_cast<int>(turnShoot_)]->increasePoints();
 		break;
-	case 2:
-		cout << "Error! Incorrect coordinates!";
-		_getch();
+	case 2 :
+		if (turnShoot_ == false) {
+			cout << "Incorrect coordinates! Press any button";
+			_getch();
+		}
 		break;
 	}
+}
+
+void
+GameManager::drawHumanStatictics() const
+{
+	players_[0]->drawStatistics();
 }

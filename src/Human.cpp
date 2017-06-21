@@ -15,9 +15,3 @@ Human::shoot(int& x, int& y)
 	cout << "Enter Y coordinate (1-10): ";
 	cin >> y;
 }
-
-void
-Human::callPause() const
-{
-	
-}
