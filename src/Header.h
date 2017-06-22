@@ -1,3 +1,6 @@
+#ifndef __Header_h__
+#define __Header_h__
+
 #include <iostream>
 #include <iomanip> 
 #include <Windows.h>
@@ -11,3 +14,5 @@
 #include "GameManager.h"
 #include "GameField.h"
 using namespace std;
+
+#endif

@@ -2,22 +2,23 @@
 
 GameField::GameField()
 {
-	for (int i = 0; i < 10; i++)
-		for (int j = 0; j < 10; j++)
-			ships_[i][j] = 0;
+	for (int i = 0; i < FIELD_SIZE; i++)
+		for (int j = 0; j < FIELD_SIZE; j++)
+			gameField_[i][j] = 0;
 
-	for (int i = 0; i < 12; i++)
-		for (int j = 0; j < 12; j++)
-			temporaryStorage_[i][j] = ' ';
+	for (int i = 0; i < FIELD_SIZE + 2; i++)
+		for (int j = 0; j < FIELD_SIZE + 2; j++)
+			temporaryField_[i][j] = 0;
 }
 
 void
 GameField::generateShips()
 {
+	const int SHIP_COUNT = 10;
 	int x, y, direction, shipsCount = 0;
-	int shipSize[10] = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
+	int shipSize[SHIP_COUNT] = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
 
-	while (shipsCount <= 10) {
+	while (shipsCount <= SHIP_COUNT) {
 		while (true) {
 			direction = rand() % 2;
 
@@ -40,15 +41,15 @@ GameField::generateShips()
 }
 
 void
-GameField::placeShip(const int& x, const int& y, const int& dirrection, const int& length)
+GameField::placeShip(const int& x, const int& y, const int& direction, const int& length)
 {
 	int xFirstCoefficient = 0, xSecondCoefficient = 0, yFirstCoefficient = 0, ySecondCoefficient = 0;
 
 	//Algorithm for vertical ships
-	if (dirrection == 0) {
+	if (direction == 0) {
 		for (int i = y; i < y + length; i++) {
-			temporaryStorage_[i][x] = 'O';
-			ships_[i - 1][x - 1] = 1;
+			temporaryField_[i][x] = 1;
+			gameField_[i - 1][x - 1] = length;
 		}
 
 		yFirstCoefficient = 1;
@@ -58,14 +59,14 @@ GameField::placeShip(const int& x, const int& y, const int& dirrection, const in
 		
 		for (int i = y - yFirstCoefficient; i < y + length + ySecondCoefficient; i++)
 			for (int j = x - xFirstCoefficient; j < x + xSecondCoefficient; j++)
-				if (temporaryStorage_[i][j] != 'O')
-					temporaryStorage_[i][j] = '$';
+				if (temporaryField_[i][j] != 1)
+					temporaryField_[i][j] = 2;
 	}
 	//Algorithm for horizontal ships
 	else {
 		for (int i = x; i < x + length; i++) {
-			temporaryStorage_[y][i] = 'O';
-			ships_[y - 1][i - 1] = 1;
+			temporaryField_[y][i] = 1;
+			gameField_[y - 1][i - 1] = length;
 		}
 
 		yFirstCoefficient = 1;
@@ -75,34 +76,34 @@ GameField::placeShip(const int& x, const int& y, const int& dirrection, const in
 
 		for (int i = y - yFirstCoefficient; i < y + ySecondCoefficient; i++)
 			for (int j = x - xFirstCoefficient; j < x + length + xSecondCoefficient; j++)
-				if (temporaryStorage_[i][j] != 'O')
-					temporaryStorage_[i][j] = '$';
+				if (temporaryField_[i][j] != 1)
+					temporaryField_[i][j] = 2;
 	}
 }
 
 bool
-GameField::isThereCollisions(const int& x, const int& y, const int& dirrection, const int& length) const
+GameField::isThereCollisions(const int& x, const int& y, const int& direction, const int& length) const
 {
-	if (dirrection == 0) {
+	if (direction == 0) {
 		for (int i = y; i < y + length - 1; i++)
-			if (temporaryStorage_[i][x] == '$' || temporaryStorage_[i][x] == 'O')
+			if (temporaryField_[i][x] == 2 || temporaryField_[i][x] == 1)
 				return true;
 
 			for (int i = y - 1; i < y + length + 1; i++)	
 				for (int j = x - 1; j < x + 2; j++)
-					if (temporaryStorage_[i][j] == 'O')
+					if (temporaryField_[i][j] == 1)
 						return true;
 
 		return false;
 	}
 	else {
 		for (int i = x; i < x + length - 1; i++)
-				if (temporaryStorage_[i][x] == '$' || temporaryStorage_[i][x] == 'O')
+				if (temporaryField_[i][x] == 2 || temporaryField_[i][x] == 1)
 					return true;
 
 		for (int i = y - 1; i < y + 2; i++)
 			for (int j = x - 1; j < x + length + 1; j++)
-				if (temporaryStorage_[i][j] == 'O')
+				if (temporaryField_[i][j] == 1)
 					return true;
 
 		return false;
@@ -112,27 +113,67 @@ GameField::isThereCollisions(const int& x, const int& y, const int& dirrection, 
 int
 GameField::takeShot(const int& x, const int& y)
 {
-	if (ships_[y][x] == 0) {
-		ships_[y][x] = -1;
+	if (gameField_[y][x] == 0) {
+		gameField_[y][x] = -1;
 		return 0;
 	}
 
-	if (ships_[y][x] == 1) {
-		ships_[y][x] = 2;
+	if (gameField_[y][x] == 1 || gameField_[y][x] == 2 || gameField_[y][x] == 3 || gameField_[y][x] == 4) {
+		gameField_[y][x] = 5;
 
 		return 1;
 	}
 
-	if (ships_[y][x] == 2 || ships_[y][x] == -1 || x < 0 || x > 9 || y < 0 || y > 9)
+	if (gameField_[y][x] == 5 || gameField_[y][x] == -1 || x < 0 || x > 9 || y < 0 || y > 9)
 		return 2;
+}
+
+int
+GameField::getAliveShips() const
+{
+	int counter = 0;
+	int shipsCopy[FIELD_SIZE][FIELD_SIZE];
+
+	for (int i = 0; i < FIELD_SIZE; i++)
+		for (int j = 0; j < FIELD_SIZE; j++)
+			shipsCopy[i][j] = gameField_[i][j];
+
+	for (int i = 0; i < FIELD_SIZE; i++) {
+		for (int j = 0; j < FIELD_SIZE; j++) {
+			if (shipsCopy[i][j] == 1)
+				counter++;
+
+			if (shipsCopy[i][j] == 2 || shipsCopy[i][j] == 3 || shipsCopy[i][j] == 4) {
+				int iterations = 0;
+
+				if (shipsCopy[i + 1][j] == 0 || 
+					shipsCopy[i + 1][j] == -1) { //direction horizontal
+					iterations = shipsCopy[i][j] - 1;
+					while (iterations > 0) {
+						shipsCopy[i][j + iterations--] = 0;
+					}
+				}
+				if (shipsCopy[i][j + 1] == 0 || 
+					shipsCopy[i][j + 1] == -1) { //direction vertical
+					iterations = shipsCopy[i][j] - 1;
+					while (iterations > 0) {
+						shipsCopy[i + iterations--][j] = 0;
+					}
+				}
+				counter++;
+			}
+		}
+	}
+
+	return counter;
 }
 
 bool
 GameField::didYouLose() const
 {
-	for (int i = 0; i < 10; i++)
-		for (int j = 0; j < 10; j++)
-			if (ships_[i][j] == 1)
+	for (int i = 0; i < FIELD_SIZE; i++)
+		for (int j = 0; j < FIELD_SIZE; j++)
+			if (gameField_[i][j] == 1)
 				return false;
 
 	return true;
@@ -141,7 +182,7 @@ GameField::didYouLose() const
 void
 GameField::draw(bool isAllVisible) const
 {
-	if (isAllVisible)
+	if (isAllVisible == true)
 		cout << "Your sea" << endl;
 	else
 		cout << "Enemy sea" << endl;
@@ -152,14 +193,14 @@ GameField::draw(bool isAllVisible) const
 
 	cout << endl;
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < FIELD_SIZE; i++) {
 		if (i + 1 < 10)
 			cout << i + 1 << ' ';
 		else
 			cout << i + 1;
 
-		for (int j = 0; j < 10; j++) {
-			switch (ships_[i][j]) {
+		for (int j = 0; j < FIELD_SIZE; j++) {
+			switch (gameField_[i][j]) {
 			case 0 :
 				cout << static_cast<char> (178);
 				break;
@@ -167,12 +208,15 @@ GameField::draw(bool isAllVisible) const
 				cout << static_cast<char> (176);
 				break;
 			case 1 :
-				if (isAllVisible)
+			case 2 :
+			case 3 :
+			case 4 :
+				if (isAllVisible == true)
 					cout << '#';
 				else
 					cout << static_cast<char> (178);
 				break;
-			case 2 :
+			case 5 :
 				cout << 'X';
 				break;
 			}

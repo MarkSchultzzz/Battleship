@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef __Timer_H__
+#define __Timer_H__
 
 class Timer
 {
@@ -17,3 +17,5 @@ private:
 	int		minutes_;
 	int		hours_;
 };
+
+#endif

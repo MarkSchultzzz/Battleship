@@ -5,7 +5,7 @@ void main()
 	srand(time(NULL));
 	HANDLE handleStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	GameManager gameManager;
+	GameManager gameManager; //0 - human | 1 - bot
 	GameField gameMap[2]; //0 - humanMap | 1 - botMap
 	Timer gameTimer, pauseTimer;
 
@@ -19,7 +19,10 @@ void main()
 
 	while (true) {
 		gameMap[0].draw(1);
-		gameMap[1].draw(0);
+		gameMap[1].draw();
+
+		gameManager.setHumanAliveShips(gameMap[0].getAliveShips());
+		gameManager.setHumanKilledShips(10 - gameMap[1].getAliveShips());
 
 		ConsoleHelper::setCursor(handleStdOut, 0, 25);
 
@@ -87,20 +90,26 @@ void main()
 
 		if (turnDone == true) {
 			switch (gameMap[!static_cast<int>(gameManager.getTurnShoot())].takeShot(gameManager.getLastX() - 1, gameManager.getLastY() - 1)) {
-			case 0 :
+			case 0:
 				gameManager.handleTurn(0);
 				break;
-			case 1 :
+			case 1:
+
 				gameManager.handleTurn(1);
 				break;
-			case 2 :
+			case 2:
 				gameManager.handleTurn(2);
 				break;
 			}
 		}
-
+		
 		for (int i = 0; i < 2; i++) {
 			if (gameMap[i].didYouLose() == true) {
+				system("cls");
+
+				gameMap[0].draw(1);
+				gameMap[1].draw(1);
+
 				ConsoleHelper::setCursor(handleStdOut, 15, 6);
 
 				i > 0 ? cout << "Humanity won this war! Well played, comrade" : cout << "Machine won! Try again";

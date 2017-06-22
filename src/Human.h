@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __Human_h__
+#define __Human_h__
 
 class Human : public Player
 {
@@ -7,3 +8,5 @@ public:
 
 	void	shoot(int& x, int& y);
 };
+
+#endif

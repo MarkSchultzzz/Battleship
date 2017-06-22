@@ -10,6 +10,38 @@ GameManager::GameManager()
 	lastY_ = 0;
 }
 
+int
+GameManager::getLastX()
+{
+	return lastX_;
+}
+
+int
+GameManager::getLastY()
+{
+	return lastY_;
+}
+
+bool
+GameManager::getTurnShoot()
+{
+	return turnShoot_;
+}
+
+void
+GameManager::setHumanAliveShips(const int& count)
+{
+	if (count >= 0)
+		players_[0]->setAliveShips(count);
+}
+
+void
+GameManager::setHumanKilledShips(const int& count)
+{
+	if (count >= 0)
+		players_[0]->setKilledShips(count);
+}
+
 void
 GameManager::makeTurn()
 {

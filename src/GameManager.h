@@ -1,13 +1,16 @@
-#pragma once
+#ifndef __GameManager_h__
+#define __GameManager_h__
 
 class GameManager
 {
 public:
 				GameManager();
 
-	int			getLastX()		{ return lastX_; }
-	int			getLastY()		{ return lastY_; }
-	bool		getTurnShoot()	{ return turnShoot_; }
+	int			getLastX();
+	int			getLastY();
+	bool		getTurnShoot();
+	void		setHumanKilledShips(const int& count);
+	void		setHumanAliveShips(const int& count);
 
 	void		makeTurn();
 	void		handleTurn(const int& turnResult);
@@ -19,3 +22,5 @@ private:
 	int			lastX_;
 	int			lastY_;
 };
+
+#endif
