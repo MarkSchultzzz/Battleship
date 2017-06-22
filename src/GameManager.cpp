@@ -10,6 +10,12 @@ GameManager::GameManager()
 	lastY_ = 0;
 }
 
+GameManager::~GameManager()
+{
+	for (int i = 0; i < 2; i++)
+		delete players_[i];
+}
+
 int
 GameManager::getLastX()
 {

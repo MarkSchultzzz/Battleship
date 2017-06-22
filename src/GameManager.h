@@ -5,6 +5,7 @@ class GameManager
 {
 public:
 				GameManager();
+				~GameManager();
 
 	int			getLastX();
 	int			getLastY();
