@@ -173,7 +173,7 @@ GameField::didYouLose() const
 {
 	for (int i = 0; i < FIELD_SIZE; i++)
 		for (int j = 0; j < FIELD_SIZE; j++)
-			if (gameField_[i][j] == 1)
+			if (gameField_[i][j] == 1 || gameField_[i][j] == 2 || gameField_[i][j] == 3 || gameField_[i][j] == 4)
 				return false;
 
 	return true;
